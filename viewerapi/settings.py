@@ -37,8 +37,9 @@ DATABASE_HOST = os.getenv('DATABASE_HOST') == 'localhost'
 
 
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', "http://localhost", '127.0.0.1', 'localhost:5173/', "http://127.0.0.1:4200", "http://127.0.0.1:8000"]
-# CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:8000", "http://127.0.0.1:5173", "http://127.0.0.1:4200", "http://127.0.0.1:8000", "0.0.0.0:4200", "0.0.0.0:8000"]
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', "http://localhost", '127.0.0.1', 'http://0.0.0.0:8000/', 'localhost:5173/', "http://127.0.0.1:4200", "http://127.0.0.1:8000"]
+# ALLOWED_HOSTS = []
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:8000", "http://127.0.0.1:5173", "http://127.0.0.1:4200", "http://127.0.0.1:8000", "http://0.0.0.0:4200"]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -51,10 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
+    'corsheaders',
     'smapi',
     'django.contrib.postgres',
     'django_filters',
-    # 'corsheaders'
     'drf_spectacular',
 ]
 
@@ -77,7 +78,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
