@@ -15,17 +15,19 @@ from .serializers import FinishingItemSerializer, FinishingSerializer
 import json as JSON
 import environ
 import os
+from .filters import FinishingViewSet
 
 
 
 env = environ.Env()
-
 
 DATABASE_HOST = os.getenv('DATABASE_HOST') == 'localhost'
 
 connection = psycopg2.connect(host=env('DB_HOST'), port=5432, user="postgres", password="postgrespw",
                               database="simpleviewer")
 cursor = connection.cursor()
+
+
 
 
 @api_view(['GET'])
@@ -49,21 +51,26 @@ def items_api(request, **kwargs):
 
 
 @api_view(['GET', 'POST', 'PUT'])
-def room_checklist(request, id=None, uuid=None):
+def room_checklist(request, uuid=None, **kwargs, ):
 
     if request.method == 'GET':
-        query = Finishing.objects.all()
-        parameters = request.GET.dict()
-        if parameters.get('roomUuid') is not None:
-            query = Finishing.objects.filter(room_uuid=parameters.get('roomUuid', None))
-        elif parameters.get('id') is not None:
-            query = Finishing.objects.filter(id=parameters.get('id', None))
-        elif parameters.get('uuid') is not None:
-            query = Finishing.objects.filter(uuid=parameters.get('uuid', None))
-        serializer = FinishingSerializer(query, many=True)
-        # return JsonResponse({"content": serializer.data})
-        return HttpResponse(JSON.dumps({"content": serializer.data}, ensure_ascii=False),
-         content_type="application/json")
+        return JsonResponse(FinishingViewSet)
+        # query = Finishing.objects.all()
+        # parameters = request.GET.dict()
+        # # print("test")
+        #
+        # # print("test2")
+        # if parameters.get('roomUuid') is not None:
+        #     query = Finishing.objects.filter(room_uuid=parameters.get('roomUuid', None))
+        # elif parameters.get('id') is not None:
+        #     query = Finishing.objects.filter(id=parameters.get('id', None))
+        # elif parameters.get('uuid') is not None:
+        #     query = Finishing.objects.filter(uuid=parameters.get('uuid', None))
+        # # serializer = FinishingSerializer(query, many=True)
+        # serializer = FinishingSerializer(query, many=True)
+        # # return JsonResponse({"content": serializer.data})
+        # return HttpResponse(JSON.dumps({"content": serializer.data}, ensure_ascii=False),
+        #  content_type="application/json")
 
 
     elif request.method == 'POST':
