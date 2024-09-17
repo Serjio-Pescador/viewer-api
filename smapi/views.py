@@ -54,23 +54,18 @@ def items_api(request, **kwargs):
 def room_checklist(request, uuid=None, **kwargs, ):
 
     if request.method == 'GET':
-        return JsonResponse(FinishingViewSet)
-        # query = Finishing.objects.all()
-        # parameters = request.GET.dict()
-        # # print("test")
-        #
-        # # print("test2")
-        # if parameters.get('roomUuid') is not None:
-        #     query = Finishing.objects.filter(room_uuid=parameters.get('roomUuid', None))
-        # elif parameters.get('id') is not None:
-        #     query = Finishing.objects.filter(id=parameters.get('id', None))
-        # elif parameters.get('uuid') is not None:
-        #     query = Finishing.objects.filter(uuid=parameters.get('uuid', None))
-        # # serializer = FinishingSerializer(query, many=True)
-        # serializer = FinishingSerializer(query, many=True)
-        # # return JsonResponse({"content": serializer.data})
-        # return HttpResponse(JSON.dumps({"content": serializer.data}, ensure_ascii=False),
-        #  content_type="application/json")
+        query = Finishing.objects.all()
+        parameters = request.GET.dict()
+        if parameters.get('roomUuid') is not None:
+            query = Finishing.objects.filter(room_uuid=parameters.get('roomUuid', None))
+        elif parameters.get('id') is not None:
+            query = Finishing.objects.filter(id=parameters.get('id', None))
+        elif parameters.get('uuid') is not None:
+            query = Finishing.objects.filter(uuid=parameters.get('uuid', None))
+        serializer = FinishingSerializer(query, many=True)
+        # return JsonResponse({"content": serializer.data})
+        return HttpResponse(JSON.dumps({"content": serializer.data}, ensure_ascii=False),
+         content_type="application/json")
 
 
     elif request.method == 'POST':
@@ -104,8 +99,6 @@ def room_checklist(request, uuid=None, **kwargs, ):
         else:
             db_item = FinishingItem.objects.filter(uuid=uuid)
             serializer = FinishingItemSerializer(db_item, many=True)
-
-            print(query)
             item_update(query)
             updated_item = FinishingItem.objects.filter(uuid=uuid)
             serializer = FinishingItemSerializer(updated_item, many=True)
@@ -135,19 +128,6 @@ def create_finishing_item(finishing_item, finishing_id: int):
     return db_finishing_item.id
 
 
-
-# def status_item(status:str) -> int:
-#     "преобразование текстового статуса в индекс для БД"
-#     match status:
-#         case "REFUSED":
-#             indx_status = 2
-#         case "APPROVE":
-#             indx_status = 1
-#         case "AWAIT":
-#             indx_status = 3
-#         case _:
-#             indx_status = 1
-#     return indx_status
 
 
 def item_update(data):
